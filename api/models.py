@@ -6,6 +6,10 @@ class UserManager(BaseUserManager):
         if not email:
             raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
+        
+        if not extra_fields.get('first_name'):
+            raise ValueError("First name is required")
+
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -19,9 +23,11 @@ class UserManager(BaseUserManager):
 class User(AbstractUser):
     username = None  # Remove the username field
     email = models.EmailField(unique=True)  # Make email the unique identifier
+    first_name = models.CharField(max_length=150, blank=False)  # required
+    last_name = models.CharField(max_length=150, blank=True)    # optional
 
     USERNAME_FIELD = 'email'  # Tell Django to use email for login
-    REQUIRED_FIELDS = []      # Email is required by default, so leave this empty
+    REQUIRED_FIELDS = ['first_name']      # Email is required by default, so leave this empty
 
     objects = UserManager()
 

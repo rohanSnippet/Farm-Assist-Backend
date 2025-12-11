@@ -2,7 +2,8 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import User
-from .serializers import UserSerializer
+from .serializers import UserSerializer, CustomTokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 # 1. Registration View
 # This handles the creation of a new user.
@@ -23,3 +24,6 @@ class UserDetailView(generics.RetrieveAPIView):
     def get_object(self):
         # Overriding this method to return the user making the request
         return self.request.user
+    
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
