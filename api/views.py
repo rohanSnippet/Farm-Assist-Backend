@@ -9,14 +9,20 @@ import firebase_admin
 from firebase_admin import auth, credentials
 from rest_framework.response import Response
 import os
+import json
 from django.conf import settings
 
 
 if not firebase_admin._apps:
- cred_path = os.path.join(settings.BASE_DIR, "serviceAccountKey.json")
+    firebase_env = os.getenv("FIREBASE_CREDENTIALS")
     
- cred = credentials.Certificate(cred_path)
- firebase_admin.initialize_app(cred)
+    if firebase_env:
+        cred = credentials.Certificate(json.loads(firebase_env))
+    """  else:
+        cred_path = os.path.join(settings.BASE_DIR, "serviceAccountKey.json")
+        cred = credentials.Certificate(cred_path) """
+    
+    firebase_admin.initialize_app(cred)
     
 # 1. Registration View
 # This handles the creation of a new user.

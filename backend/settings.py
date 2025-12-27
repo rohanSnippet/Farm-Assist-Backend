@@ -116,7 +116,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
     )
 } """
 
-DATABASES = {
+""" DATABASES = {
     'default':{
         'ENGINE':'django.db.backends.postgresql',
         'NAME': os.environ.get('DB_NAME','farmassist'),
@@ -125,13 +125,14 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASSWORD','root'),
         'PORT': os.environ.get('DB_PORT','5432'),
     }
+} """
+
+DATABASES = {
+    'default': dj_database_url.config(
+        conn_max_age=600,
+        ssl_require=not os.getenv("DEBUG", "False") == "True",
+    )
 }
-
-
-#postgresql://neondb_owner:npg_F4jKoklYgv7M@ep-morning-wave-a4ymokk8-pooler.us-east-1.aws.neon.tech/FarmAssist1?sslmode=require&channel_binding=require
-
-# Password validation
-# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
